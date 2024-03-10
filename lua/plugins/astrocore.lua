@@ -71,6 +71,9 @@ return {
         ["<A-l>"] = { ":vertical resize +2<CR>" },
         -- don't yank text on cut ( x )
         ["x"] = { '"_x' },
+
+        ["<leader><leader>"] = { function() require("telescope.builtin").buffers() end, desc = "Find buffers" },
+        ["<leader>fg"] = { function() require("telescope.builtin").git_status() end, desc = "Find git files" },
       },
 
       i = {
