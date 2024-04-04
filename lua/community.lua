@@ -4,8 +4,7 @@
 
 ---@type LazySpec
 return {
-  -- TODO: Remove branch v4 on release
-  { "almo7aya/astrocommunity", branch = "v4" },
+  { "AstroNvim/astrocommunity" },
 
   { import = "astrocommunity.completion.copilot-lua-cmp" },
 
