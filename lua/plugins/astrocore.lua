@@ -1,5 +1,3 @@
-if true then return {} end -- WARN: REMOVE THIS LINE TO ACTIVATE THIS FILE
-
 -- AstroCore provides a central place to modify mappings, vim options, autocommands, and more!
 -- Configuration documentation can be found with `:h astrocore`
 -- NOTE: We highly recommend setting up the Lua Language Server (`:LspInstall lua_ls`)
@@ -32,6 +30,15 @@ return {
         spell = false, -- sets vim.opt.spell
         signcolumn = "yes", -- sets vim.opt.signcolumn to yes
         wrap = false, -- sets vim.opt.wrap
+        listchars = {
+          space = "₋",
+          eol = "⤶",
+          trail = "~",
+          extends = ">",
+          precedes = "<",
+          tab = "->",
+        },
+        list = true,
       },
       g = { -- vim.g.<key>
         -- configure global vim variables (vim.g)
@@ -44,28 +51,58 @@ return {
     mappings = {
       -- first key is the mode
       n = {
-        -- second key is the lefthand side of the map
-
-        -- navigate buffer tabs
-        ["]b"] = { function() require("astrocore.buffer").nav(vim.v.count1) end, desc = "Next buffer" },
-        ["[b"] = { function() require("astrocore.buffer").nav(-vim.v.count1) end, desc = "Previous buffer" },
-
-        -- mappings seen under group name "Buffer"
-        ["<Leader>bd"] = {
-          function()
-            require("astroui.status.heirline").buffer_picker(
-              function(bufnr) require("astrocore.buffer").close(bufnr) end
-            )
-          end,
-          desc = "Close buffer from tabline",
-        },
-
-        -- tables with just a `desc` key will be registered with which-key if it's installed
+        -- tables with the `name` key will be registered with which-key if it's installed
         -- this is useful for naming menus
-        -- ["<Leader>b"] = { desc = "Buffers" },
+        ["<leader>b"] = { name = "Buffers" },
+        -- quick save
+        -- ["<C-s>"] = { ":w!<cr>", desc = "Save File" },  -- change description but the same command
+        ["<S-j>"] = {
+          function() require("astrocore.buffer").nav(-(vim.v.count > 0 and vim.v.count or 1)) end,
+          desc = "Previous buffer",
+        },
+        ["<S-k>"] = {
+          function() require("astrocore.buffer").nav(vim.v.count > 0 and vim.v.count or 1) end,
+          desc = "Next buffer",
+        },
+        ["<Leader>gm"] = { "<cmd>OpenInGHRepo <cr>", desc = "Open repository in GitHub" },
+        ["<Leader>gf"] = { "<cmd>OpenInGHFile <cr>", desc = "Open file in GitHub" },
+        -- copy whole file content
+        ["<Leader>aa"] = { ":silent :%y+ <CR>", desc = "Copy whole buffer content" },
+        ["q"] = { ":noh <cr>", desc = "Disable micro recording thing" },
 
+        -- resize with arrows
+        ["<A-k>"] = { ":resize -2<CR>" },
+        ["<A-j>"] = { ":resize +2<CR>" },
+        ["<A-h>"] = { ":vertical resize -2<CR>" },
+        ["<A-l>"] = { ":vertical resize +2<CR>" },
+        -- don't yank text on cut ( x )
+        ["x"] = { '"_x' },
+
+        ["<leader><leader>"] = { function() require("telescope.builtin").buffers() end, desc = "Find buffers" },
+        ["<leader>fg"] = { function() require("telescope.builtin").git_status() end, desc = "Find git files" },
+      },
+
+      i = {
+        -- Move current line / block with Alt-j/k ala vscode.
+        ["<A-j>"] = { "<Esc>:m .+1<CR>==gi" },
+        -- Move current line / block with Alt-j/k ala vscode.
+        ["<A-k>"] = { "<Esc>:m .-2<CR>==gi" },
+      },
+      v = {
+        ["<Leader>gf"] = { "<cmd>OpenInGHFile <cr>", desc = "Open file in GitHub" },
+        -- don't yank text on cut ( x )
+        ["x"] = { '"_x' },
+        -- don't copy the replaced text after pasting in visual mode
+        ["p"] = { '"_dP' },
+        -- Better indenting
+        ["<"] = { "<gv" },
+        [">"] = { ">gv" },
+        ["<A-j>"] = { ":m '>+1<CR>gv-gv" },
+        ["<A-k>"] = { ":m '<-2<CR>gv-gv" },
+      },
+      t = {
         -- setting a mapping to false will disable it
-        -- ["<C-S>"] = false,
+        -- ["<esc>"] = false,
       },
     },
   },

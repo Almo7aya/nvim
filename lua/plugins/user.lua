@@ -1,85 +1,59 @@
-if true then return {} end -- WARN: REMOVE THIS LINE TO ACTIVATE THIS FILE
-
 -- You can also add or configure plugins by creating files in this `plugins/` folder
 -- Here are some examples:
 
 ---@type LazySpec
 return {
-
-  -- == Examples of Adding Plugins ==
-
-  "andweeb/presence.nvim",
   {
-    "ray-x/lsp_signature.nvim",
-    event = "BufRead",
-    config = function() require("lsp_signature").setup() end,
-  },
-
-  -- == Examples of Overriding Plugins ==
-
-  -- customize alpha options
-  {
-    "goolord/alpha-nvim",
-    opts = function(_, opts)
-      -- customize the dashboard header
-      opts.section.header.val = {
-        " █████  ███████ ████████ ██████   ██████",
-        "██   ██ ██         ██    ██   ██ ██    ██",
-        "███████ ███████    ██    ██████  ██    ██",
-        "██   ██      ██    ██    ██   ██ ██    ██",
-        "██   ██ ███████    ██    ██   ██  ██████",
-        " ",
-        "    ███    ██ ██    ██ ██ ███    ███",
-        "    ████   ██ ██    ██ ██ ████  ████",
-        "    ██ ██  ██ ██    ██ ██ ██ ████ ██",
-        "    ██  ██ ██  ██  ██  ██ ██  ██  ██",
-        "    ██   ████   ████   ██ ██      ██",
+    "ellisonleao/gruvbox.nvim",
+    lazy = false,
+    priority = 1000,
+    config = function()
+      require("gruvbox").setup {
+        inverse = false,
+        palette_overrides = {
+          dark1 = "#232323",
+          dark2 = "#666666",
+          bright_aqua = "#83a598",
+          bright_green = "#adb026",
+          gray = "#5c6370",
+        },
+        overrides = {
+          Comment = { fg = "#5c6370", italic = true, bold = true },
+          Function = { link = "GruvboxOrangeBold" },
+          Whitespace = { fg = "#4b5263" },
+          BufferCurrent = { bg = "#5c6370" },
+          StatusLine = { fg = "#ebdbb2", bg = "#282828", reverse = false },
+        },
       }
+    end,
+  },
+  {
+    "lewis6991/gitsigns.nvim",
+    opts = function(_, opts)
+      opts.current_line_blame = true
+      print(vim.inspect(opts))
       return opts
     end,
   },
-
-  -- You can disable default plugins as follows:
-  { "max397574/better-escape.nvim", enabled = false },
-
-  -- You can also easily customize additional setup of plugins that is outside of the plugin's setup call
   {
-    "L3MON4D3/LuaSnip",
-    config = function(plugin, opts)
-      require "astronvim.plugins.configs.luasnip"(plugin, opts) -- include the default astronvim config that calls the setup call
-      -- add more custom luasnip configuration such as filetype extend or custom snippets
-      local luasnip = require "luasnip"
-      luasnip.filetype_extend("javascript", { "javascriptreact" })
+    "nvim-neo-tree/neo-tree.nvim",
+    opts = function(_, opts)
+      opts.close_if_last_window = true
+      opts.filesystem.filtered_items = {
+        hide_dotfiles = false,
+        hide_gitignored = false,
+      }
+      opts.window.mappings["<S-j>"] = "prev_source"
+      opts.window.mappings["<S-k>"] = "next_source"
+      opts.window.position = "right"
+      return opts
     end,
   },
-
   {
-    "windwp/nvim-autopairs",
-    config = function(plugin, opts)
-      require "astronvim.plugins.configs.nvim-autopairs"(plugin, opts) -- include the default astronvim config that calls the setup call
-      -- add more custom autopairs configuration such as custom rules
-      local npairs = require "nvim-autopairs"
-      local Rule = require "nvim-autopairs.rule"
-      local cond = require "nvim-autopairs.conds"
-      npairs.add_rules(
-        {
-          Rule("$", "$", { "tex", "latex" })
-            -- don't add a pair if the next character is %
-            :with_pair(cond.not_after_regex "%%")
-            -- don't add a pair if  the previous character is xxx
-            :with_pair(
-              cond.not_before_regex("xxx", 3)
-            )
-            -- don't move right when repeat character
-            :with_move(cond.none())
-            -- don't delete if the next character is xx
-            :with_del(cond.not_after_regex "xx")
-            -- disable adding a newline when you press <cr>
-            :with_cr(cond.none()),
-        },
-        -- disable for .vim files, but it work for another filetypes
-        Rule("a", "a", "-vim")
-      )
+    "folke/which-key.nvim",
+    opts = function(_, opts)
+      opts.show_help = false
+      opts.show_keys = false
     end,
   },
 }
