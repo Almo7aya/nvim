@@ -14,4 +14,5 @@ return {
   { import = "astrocommunity.pack.json" },
   { import = "astrocommunity.pack.docker" },
   { import = "astrocommunity.pack.bash" },
+  { import = "astrocommunity.pack.cpp" },
 }
